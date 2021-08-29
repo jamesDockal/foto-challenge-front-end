@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import Header from "../../components/header";
 import ImageCard from "../../components/productCard";
-import { api } from "../../service/api";
-import "./styles.css";
-
 import toast, { Toaster } from "react-hot-toast";
 import NoImage from "../../assets/no_image.png";
+
+import { api } from "../../service/api";
 import { useProduct } from "../../context/Products";
+
+import "./styles.css";
 
 type Image = {
   isNew: boolean;
@@ -72,7 +73,7 @@ export default function Home() {
       <Header />
       <strong className="challenge">FOTO CHALLENGE</strong>
       <div className="products-card">
-        {allImages.length & totalProducts ? (
+        {allImages.length && totalProducts >= 1 ? (
           <>
             {allImages.map((image) => (
               <ImageCard isNew={image.isNew} image={image} key={image.id} />

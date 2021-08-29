@@ -18,17 +18,32 @@ export default function ProductCard({ image, isNew }: ImageCardProps) {
   const { setTotalProducts, totalProducts } = useProduct();
 
   useEffect(() => {
-    async function getImage() {
-      const { data } = await api.get(`/images/${image.id}`);
-      setPhoto(data);
-    }
     getImage();
   }, []);
 
+  async function getImage() {
+    const { data } = await api.get(`/images/${image.id}`);
+    setPhoto(data);
+  }
+
+  console.log("totalProducts", totalProducts);
+
+  useEffect(() => {
+    console.log("notlooping222");
+
+    setTotalProducts(totalProducts);
+  }, [totalProducts]);
+
   async function deleteProduct() {
-    const { data } = await api.delete(`/images/${image.id}`);
-    setTotalProducts(totalProducts - 1);
-    setPhoto(null);
+    try {
+      await api.delete(`/images/${image.id}`);
+      const total = totalProducts - 1;
+
+      setTotalProducts(total);
+      setPhoto(null);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (
