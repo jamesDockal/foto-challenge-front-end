@@ -1,0 +1,56 @@
+.productcard-container {
+  height: 300px;
+  max-height: 300px;
+  background-color: #eeeeee;
+  border-radius: 12px;
+  box-shadow: rgba(0, 0, 0, 0.2) 3px 1.95px 2.6px;
+}
+
+.card-image {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  background-color: white;
+
+  height: 250px;
+  width: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.card-image:hover {
+  transform: skewY(-2deg) scale(1.075);
+  border-radius: 12px;
+}
+
+.card-image:hover ~ .remove-product {
+  filter: opacity(0.4);
+}
+
+.remove-product {
+  border: 2px solid red;
+  border-radius: 100%;
+  color: red;
+  width: 22px;
+  height: 22px;
+  font-size: 20px;
+  font-family: "Asap";
+  font-weight: 100;
+
+  margin: 0 auto;
+  margin-top: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.remove-product:hover {
+  transform: scale(1.05);
+  border: 2px solid darkred;
+  color: darkred;
+}
+
+.x {
+  transform: translateY(-10%);
+  user-select: none;
+}
