@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useProduct } from "../../context/Products";
 import { api } from "../../service/api";
 import "./styles.css";
 
@@ -14,6 +15,7 @@ type ImageCardProps = {
 
 export default function ProductCard({ image, isNew }: ImageCardProps) {
   const [photo, setPhoto] = useState<any>();
+  const { setTotalProducts, totalProducts } = useProduct();
 
   useEffect(() => {
     async function getImage() {
@@ -25,14 +27,14 @@ export default function ProductCard({ image, isNew }: ImageCardProps) {
 
   async function deleteProduct() {
     const { data } = await api.delete(`/images/${image.id}`);
-    console.log("happend", data);
+    setTotalProducts(totalProducts - 1);
     setPhoto(null);
   }
 
   return (
     <div
       style={{ display: photo ? "block" : "none" }}
-      className={`productcard-container ${isNew && "is-new"}`}
+      className={`productcard-container ${isNew && "is-new"} `}
     >
       <img
         className="card-image"

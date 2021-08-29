@@ -6,6 +6,7 @@ import "./styles.css";
 
 import toast, { Toaster } from "react-hot-toast";
 import NoImage from "../../assets/no_image.png";
+import { useProduct } from "../../context/Products";
 
 type Image = {
   isNew: boolean;
@@ -17,13 +18,15 @@ export default function Home() {
   const [allImages, setAllImages] = useState<Image[]>([]);
   const imageRef = useRef<HTMLInputElement>(null);
 
+  const { setTotalProducts, totalProducts } = useProduct();
+
   useEffect(() => {
     getImages([]);
   }, []);
 
   async function getImages(newImagesId: string[]) {
     const { data } = await api.get("/images");
-    const teste = data.Allimages.map((image: Image) => {
+    const formattedImages = data.Allimages.map((image: Image) => {
       if (newImagesId.includes(image.id)) {
         image.isNew = true;
       } else {
@@ -31,9 +34,8 @@ export default function Home() {
       }
       return image;
     });
-    console.log("data.Allimages", teste);
-
-    setAllImages(data.Allimages);
+    setTotalProducts(formattedImages.length);
+    setAllImages(formattedImages);
   }
 
   function openFolder() {
@@ -56,10 +58,8 @@ export default function Home() {
         form.append("file", file);
         const { data } = await api.post("/images", form);
 
-        // console.log("files", data.createdImage.id);
         newImagesId.push(data.createdImage.id);
       }
-      // console.log("newImagesId", newImagesId);
 
       getImages(newImagesId);
     } catch (error) {
@@ -72,7 +72,7 @@ export default function Home() {
       <Header />
       <strong className="challenge">FOTO CHALLENGE</strong>
       <div className="products-card">
-        {allImages.length ? (
+        {allImages.length & totalProducts ? (
           <>
             {allImages.map((image) => (
               <ImageCard isNew={image.isNew} image={image} key={image.id} />
