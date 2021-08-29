@@ -7,21 +7,32 @@ import "./styles.css";
 import toast, { Toaster } from "react-hot-toast";
 import NoImage from "../../assets/no_image.png";
 
-type images = {
+type Image = {
+  isNew: boolean;
   image: any;
   id: string;
 };
 
 export default function Home() {
-  const [allImages, setAllImages] = useState<images[]>([]);
+  const [allImages, setAllImages] = useState<Image[]>([]);
   const imageRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    getImages();
+    getImages([]);
   }, []);
 
-  async function getImages() {
+  async function getImages(newImagesId: string[]) {
     const { data } = await api.get("/images");
+    const teste = data.Allimages.map((image: Image) => {
+      if (newImagesId.includes(image.id)) {
+        image.isNew = true;
+      } else {
+        image.isNew = false;
+      }
+      return image;
+    });
+    console.log("data.Allimages", teste);
+
     setAllImages(data.Allimages);
   }
 
@@ -32,19 +43,25 @@ export default function Home() {
   async function saveImage(e: any) {
     try {
       const files = e.target.files;
+
       if (files.length > 6) {
         toast.error("You can not save more than 6 pictures at once");
         return;
       }
 
+      let newImagesId = [];
       for (let index = 0; index < files.length; index++) {
         const file = files[index];
         const form = new FormData();
         form.append("file", file);
-        await api.post("/images", form);
-      }
+        const { data } = await api.post("/images", form);
 
-      getImages();
+        // console.log("files", data.createdImage.id);
+        newImagesId.push(data.createdImage.id);
+      }
+      // console.log("newImagesId", newImagesId);
+
+      getImages(newImagesId);
     } catch (error) {
       console.log("error", error);
     }
@@ -58,7 +75,7 @@ export default function Home() {
         {allImages.length ? (
           <>
             {allImages.map((image) => (
-              <ImageCard image={image} key={image.id} />
+              <ImageCard isNew={image.isNew} image={image} key={image.id} />
             ))}
             <div className="add-product" onClick={() => openFolder()}>
               <span className="plus">+</span>

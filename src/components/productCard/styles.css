@@ -6,6 +6,21 @@
   box-shadow: rgba(0, 0, 0, 0.2) 3px 1.95px 2.6px;
 }
 
+.is-new {
+  animation: forwards 0.5s fadeInDown;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .card-image {
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;

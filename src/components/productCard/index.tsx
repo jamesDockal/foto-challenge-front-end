@@ -9,9 +9,10 @@ type Image = {
 
 type ImageCardProps = {
   image: Image;
+  isNew?: boolean;
 };
 
-export default function ImageCard({ image }: ImageCardProps) {
+export default function ProductCard({ image, isNew }: ImageCardProps) {
   const [photo, setPhoto] = useState<any>();
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function ImageCard({ image }: ImageCardProps) {
   return (
     <div
       style={{ display: photo ? "block" : "none" }}
-      className="productcard-container"
+      className={`productcard-container ${isNew && "is-new"}`}
     >
       <img
         className="card-image"
